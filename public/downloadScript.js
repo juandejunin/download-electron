@@ -1,30 +1,33 @@
-function clearUrlInput () {
-  document.getElementById('urlInput').value = ''
+function clearUrlInput() {
+  document.getElementById('urlInput').value = '';
 }
 
-function showMessage (message) {
-  document.getElementById('messageContainer').innerHTML = `<h1>${message}</h1>`
+function showMessage(message) {
+  alert(message); 
 }
 
-function sendRequest () {
-  const form = document.getElementById('downloadForm')
-  const formData = new FormData(form)
+function sendRequest() {
+  const form = document.getElementById('downloadForm');
+  const formData = new FormData(form);
 
   fetch('http://localhost:3000/download', {
-    method: 'POST',
-    body: formData
+      method: 'POST',
+      body: formData
   })
-    .then((response) => {
-      if (response.ok) {
-        showMessage('¡Descarga completa!')
-
-        clearUrlInput()
-      } else {
-        showMessage(`Error al descargar el archivo. Código de estado: ${response.status}`)
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error)
-      showMessage('Error al descargar el archivo. Por favor, inténtalo de nuevo.')
-    })
+  .then(response => {
+      if (!response.ok) {
+          return response.json().then(data => {
+              throw new Error(data.errors ? data.errors[0].msg : 'Error en la red');
+          });
+      }       
+     
+  })
+  .then(data => {
+      showMessage('¡Descarga completa!');
+      clearUrlInput();
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      showMessage(error.message);
+  });
 }
