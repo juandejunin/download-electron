@@ -1,5 +1,5 @@
 {
-  "name": "download-electron",
+  "name": "descargatube",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -7,6 +7,43 @@
     "start": "electron main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-builder"
+  },
+  "build": {
+    "appId": "com.juanamieva.descargatube",
+    "directories": {
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "appDownload.js",
+      "preload.js",
+      "public/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "node_modules/ffmpeg-static",
+        "to": "resources/ffmpeg-static",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "icon": "build"
+    }
   },
   "keywords": [],
   "author": "",
@@ -23,6 +60,7 @@
     "eslint": "^8.56.0",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
+    "ffmpeg-static": "^5.2.0",
     "fluent-ffmpeg": "^2.1.2",
     "multer": "^1.4.5-lts.1",
     "standard": "^17.1.0",
